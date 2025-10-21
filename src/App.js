@@ -1,24 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useMemo, useState } from "react";
+import Clicker from "./Clicker";
+import People from './People'
 
-function App() {
+// const colors = [
+//   `hsl(${Math.random() * 360}deg,100%,70%)`,
+//   `hsl(${Math.random() * 360}deg,100%,70%)`,
+//   `hsl(${Math.random() * 360}deg,100%,70%)`,
+// ];
+
+function App({ clickersCount, children }) {
+  const [hasClicker, setHasClicker] = useState(true);
+  const [count, setcount] = useState(0);
+
+  const toggleClickerclick = () => {
+    setHasClicker(!hasClicker);
+  };
+  const increment = () => {
+    setcount(count + 1);
+  };
+  const colors = useMemo(() => {
+    const colors = [];
+    for (let i = 0; i < clickersCount; i++)
+      colors.push(`hsl(${Math.random() * 360}deg,100%,70%)`);
+
+    return colors;
+  }, [clickersCount]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {children}
+      <div>Total count: {count}</div>
+      <button onClick={toggleClickerclick}>
+        {hasClicker ? "hide" : "show"}Clicker{" "}
+      </button>
+      {hasClicker && (
+        <>
+          {[...Array(clickersCount)].map((value, index) => (
+            <Clicker
+              key={index}
+              increment={increment}
+              keyName={`count${index}`}
+              color={colors[index]}
+            />
+          ))}
+        </>
+      )}
+      <People/>
+    </>
   );
 }
 
