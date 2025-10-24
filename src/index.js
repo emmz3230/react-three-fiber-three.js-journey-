@@ -1,19 +1,27 @@
 import React from "react";
-import ReactDOM, { createRoot } from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import "./index.css";
-import App from "./App";
+import { Canvas } from "@react-three/fiber";
+import * as THREE from "three";
+import Experience from "./first-r3f-app/Experience";
 
 const root = createRoot(document.querySelector("#root"));
 root.render(
-  <div>
-    <App
-      clickersCount={3}
-      children={
-        <>
-          <h1>My First React App</h1>
-          <h2>And a fancy subtitle</h2>
-        </>
-      }
-    />
-  </div>
+  <React.StrictMode>
+    <Canvas
+      gl={{
+        antialias: true,
+        toneMapping: THREE.ACESFilmicToneMapping,
+        outPutEncoding: THREE.sRGBEncoding,
+      }}
+      camera={{
+        fov: 45,
+        near: 0.1,
+        far: 200,
+        position: [3, 2, 6],
+      }}
+    >
+      <Experience />
+    </Canvas>
+  </React.StrictMode>
 );

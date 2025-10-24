@@ -1,7 +1,7 @@
 import "./App.css";
 import { useMemo, useState } from "react";
 import Clicker from "./Clicker";
-import People from './People'
+import People from "./People";
 
 // const colors = [
 //   `hsl(${Math.random() * 360}deg,100%,70%)`,
@@ -46,7 +46,7 @@ function App({ clickersCount, children }) {
           ))}
         </>
       )}
-      <People/>
+      <People />
     </>
   );
 }
