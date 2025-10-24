@@ -13,7 +13,7 @@ const CustomObject = () => {
       positions[i] = (Math.random() - 0.5) * 3;
 
     return positions;
-  }, []);
+  });
 
   useEffect(() => {
     geometryRef.current.computeVertexNormals();
