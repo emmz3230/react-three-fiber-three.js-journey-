@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
-import Experience from "./debug-r3f/Experience";
+import Experience from "./Environment-staging/Experience";
 // import { Leva } from "leva";
 
 const root = createRoot(document.querySelector("#root"));
@@ -17,6 +17,7 @@ root.render(
       //   toneMapping: THREE.ACESFilmicToneMapping,
       //   outPutEncoding: THREE.sRGBEncoding,
       // }}
+      shadows={false}
       camera={{
         fov: 45,
         near: 0.1,
@@ -24,6 +25,7 @@ root.render(
         position: [3, 2, 6],
       }}
     >
+      {/* <color args={["#ff0000"]} attach="background" /> */}
       <Experience />
     </Canvas>
   </StrictMode>
