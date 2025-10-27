@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
-import Experience from "./Environment-staging/Experience";
+import Experience from "./Load-models/Experience";
 // import { Leva } from "leva";
 
 const root = createRoot(document.querySelector("#root"));
