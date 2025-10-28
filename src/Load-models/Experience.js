@@ -1,7 +1,9 @@
-import React from "react";
+import React, { Suspense } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "@react-three/drei";
 import { Perf } from "r3f-perf";
+import Model from "./Model.js";
+import PlaceHolder from "./PlaceHolder.js";
 
 const Experience = () => {
   return (
@@ -14,14 +16,7 @@ const Experience = () => {
         intensity={4.5}
       />
       <ambientLight intensity={1.5} />
-      <mesh castShadow position-x={-2}>
-        <sphereGeometry />
-        <meshStandardMaterial color="orange" />
-      </mesh>
-      <mesh castShadow position-x={2} scale={1.5}>
-        <boxGeometry scale={1.5} />
-        <meshStandardMaterial color="mediumpurple" />
-      </mesh>
+
       <mesh
         receiveShadow
         position-y={-1}
@@ -31,6 +26,13 @@ const Experience = () => {
         <planeGeometry />
         <meshStandardMaterial color="greenyellow" />
       </mesh>
+      <Suspense
+        fallback={
+          <PlaceHolder position-x={2} rotation-y={Math.PI * 0.2} />
+        }
+      >
+        <Model />
+      </Suspense>
     </>
   );
 };
