@@ -4,6 +4,7 @@ import { OrbitControls } from "@react-three/drei";
 import { Perf } from "r3f-perf";
 import Model from "./Model.js";
 import PlaceHolder from "./PlaceHolder.js";
+import Fox from "./Fox.js";
 
 const Experience = () => {
   return (
@@ -14,6 +15,7 @@ const Experience = () => {
         castShadow
         position={[1, 2, 3]}
         intensity={4.5}
+        shadow-normalBias={0.04}
       />
       <ambientLight intensity={1.5} />
 
@@ -27,12 +29,11 @@ const Experience = () => {
         <meshStandardMaterial color="greenyellow" />
       </mesh>
       <Suspense
-        fallback={
-          <PlaceHolder position-x={2} rotation-y={Math.PI * 0.2} />
-        }
+        fallback={<PlaceHolder position-y={0.5} scale={[2, 3, 2]} />}
       >
         <Model />
       </Suspense>
+      <Fox />
     </>
   );
 };
