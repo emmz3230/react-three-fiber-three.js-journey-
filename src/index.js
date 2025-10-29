@@ -17,6 +17,7 @@ root.render(
       //   toneMapping: THREE.ACESFilmicToneMapping,
       //   outPutEncoding: THREE.sRGBEncoding,
       // }}
+      flat
       shadows={false}
       camera={{
         fov: 45,
