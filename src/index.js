@@ -3,8 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
-import Experience from "./Mouse-events/Experience";
-// import { Leva } from "leva";
+import Experience from "./Post-Processing/Experience";
 
 const root = createRoot(document.querySelector("#root"));
 root.render(
