@@ -9,6 +9,9 @@ body,
   overflow: hidden;
   /* background: lightskyblue; */
 }
+canvas {
+  touch-action: none;
+}
 .label > div {
   font-family: Helvetica, Arial;
   position: absolute;
