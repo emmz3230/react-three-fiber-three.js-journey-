@@ -48,7 +48,15 @@ const Experience = () => {
               <iframe src="https://bruno-simon.com/html/" />
             </Html>
           </primitve>
-          <Text font="./banger-v20-latin-regular.wolf" fontSize={1}>
+          <Text
+            font="./banger-v20-latin-regular.wolf"
+            fontSize={1}
+            position={[2, 0.75, 0.75]}
+            rotation-y={-1.25}
+            // children-y={'Samuel/rEmmanuel'}
+            maxWidth={2}
+            textAlign="center"
+          >
             Samuel Emmanuel
           </Text>
         </Float>
