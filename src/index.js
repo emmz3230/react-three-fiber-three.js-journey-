@@ -5,6 +5,7 @@ import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 import Experience from "./r3f-game/Experience";
 import { KeyboardControls } from "@react-three/drei";
+import Interface from "./r3f-game/Interface";
 
 const root = createRoot(document.querySelector("#root"));
 root.render(
@@ -37,6 +38,7 @@ root.render(
         {/* <color args={["#ff0000"]} attach="background" /> */}
         <Experience />
       </Canvas>
+      <Interface />
     </KeyboardControls>
   </StrictMode>
 );
