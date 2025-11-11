@@ -1,5 +1,6 @@
 import { useKeyboardControls } from "@react-three/drei";
 import "./index.css";
+// r3f-app/src/index.css
 import useGame from "./stores/useGame";
 import { useEffect, useRef } from "react";
 import { addEffect } from "@react-three/fiber";

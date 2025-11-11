@@ -2,7 +2,6 @@ import { useRapier, RigidBody } from "@react-three/rapier";
 import { useFrame } from "@react-three/fiber";
 import { useKeyboardControls } from "@react-three/drei";
 import { useState, useEffect, useRef } from "react";
-// import * as RAPIER from "@dimforge/rapier3d-compat"
 import * as THREE from "three";
 import useGame from "./r3f-game/stores/useGame";
 
@@ -10,31 +9,29 @@ export default function Player() {
   const body = useRef();
   const [subscribeKeys, getKeys] = useKeyboardControls();
   const { rapier, world } = useRapier();
-  const rapierWorld = world.raw();
-
-  const [smoothedCameraPosition] = useState(() => {
-    new THREE.Vector3(10, 10, 10);
-  });
-  const [smoothedCameraTarget] = useState(() => {
-    new THREE.Vector3();
-  });
+  const smoothedCameraPosition = useRef(
+    new THREE.Vector3(10, 10, 10)
+  );
+  const smoothedCameraTarget = useRef(new THREE.Vector3());
   const start = useGame((state) => state.start);
   const end = useGame((state) => state.end);
   const restart = useGame((state) => state.restart);
   const blocksCount = useGame((state) => state.blocksCount);
 
   const jump = () => {
-    const origin = body.current.translation;
-    origin.y -= 0.31;
+    if (!body.current) return;
 
+    const origin = body.current.translation();
+    origin.y -= 0.31;
     const direction = { x: 0, y: -1, z: 0 };
     const ray = new rapier.Ray(origin, direction);
-    const hit = rapierWorld.castRay[(ray, 10, true)];
+    const hit = world.castRay(ray, 10, true);
 
     if (hit.toi < 0.15) {
       body.current.applyImpulse({ x: 0, y: 0.5, z: 0 });
     }
   };
+
   const reset = () => {
     body.current.setTranslation({ x: 0, y: 1, z: 0 });
     body.current.setLinvel({ x: 0, y: 0, z: 0 });
@@ -51,24 +48,27 @@ export default function Player() {
 
     const unsubscribeJump = subscribeKeys(
       (state) => state.jump,
-
       (value) => {
-        if (value) {
-          jump();
-        }
+        if (value) jump();
       }
     );
 
-    const unsubscribeAny = subscribeKeys(start());
+    const unsubscribeAny = subscribeKeys(() => {
+      start();
+    });
+
     return () => {
       unsubscribeReset();
       unsubscribeJump();
       unsubscribeAny();
     };
-  });
+  }, []);
 
   useFrame((state, delta) => {
-    const { forward, backward, leftward, rigthward } = getKeys();
+    /**
+     * Controls
+     */
+    const { forward, backward, leftward, rightward } = getKeys();
 
     const impulse = { x: 0, y: 0, z: 0 };
     const torque = { x: 0, y: 0, z: 0 };
@@ -81,39 +81,47 @@ export default function Player() {
       torque.x -= torqueStrength;
     }
 
-    if (rigthward) {
+    if (rightward) {
       impulse.x += impulseStrength;
       torque.z -= torqueStrength;
     }
+
     if (backward) {
       impulse.z += impulseStrength;
       torque.x += torqueStrength;
     }
+
     if (leftward) {
       impulse.x -= impulseStrength;
       torque.z += torqueStrength;
     }
+
     body.current.applyImpulse(impulse);
     body.current.applyTorqueImpulse(torque);
 
-    // camera
+    /**
+     * Camera
+     */
     const bodyPosition = body.current.translation();
 
     const cameraPosition = new THREE.Vector3();
     cameraPosition.copy(bodyPosition);
     cameraPosition.z += 2.25;
-    cameraPosition.z += 0.65;
+    cameraPosition.y += 0.65;
 
     const cameraTarget = new THREE.Vector3();
     cameraTarget.copy(bodyPosition);
-    cameraTarget.y *= 0.25;
+    cameraTarget.y += 0.25;
 
-    smoothedCameraPosition.lerp(cameraPosition, 5 * delta);
-    smoothedCameraTarget.lerp(cameraTarget, 5 * delta);
+    smoothedCameraPosition.current.lerp(cameraPosition, 5 * delta);
+    smoothedCameraTarget.current.lerp(cameraTarget, 5 * delta);
 
-    state.camera.position.copy(cameraPosition);
-    state.camera.lookAt(cameraTarget);
+    state.camera.position.copy(smoothedCameraPosition.current);
+    state.camera.lookAt(smoothedCameraTarget.current);
 
+    /**
+     * Phases
+     */
     if (bodyPosition.z < -(blocksCount * 4 + 2)) end();
 
     if (bodyPosition.y < -4) restart();
@@ -121,6 +129,8 @@ export default function Player() {
 
   return (
     <RigidBody
+      ref={body}
+      canSleep={false}
       colliders="ball"
       restitution={0.2}
       friction={1}
@@ -128,7 +138,7 @@ export default function Player() {
       angularDamping={0.5}
       position={[0, 1, 0]}
     >
-      <mesh>
+      <mesh castShadow>
         <icosahedronGeometry args={[0.3, 1]} />
         <meshStandardMaterial flatShading color="mediumpurple" />
       </mesh>
